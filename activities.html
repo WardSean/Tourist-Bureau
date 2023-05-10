@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Local Visitor's Bureau - Activities</title>
+    <link rel="stylesheet" type="text/css" href="activities.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body>
+    <header>
+      <h1>Activities</h1>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="hiking.html">Hiking</a>
+        <a href="video.html">Video</a>
+      </nav>
+    </header>
+    <main>
+      <form id="activity-form">
+        <label for="activity-categories">Activity Category:</label>
+        <select id="activity-categories">
+          <option value="" selected>Select one</option>
+        </select>
+        <br>
+        <label for="activities">Activity:</label>
+        <select id="activities">
+          <option value="" selected>Select one</option>
+        </select>
+      </form>
+      <section id="activity-details" class="hidden">
+        <h2 id="activity-name"></h2>
+        <p id="activity-description"></p>
+        <p id="activity-location"></p>
+        <p id="activity-price"></p>
+        <form id="buy-form" class="hidden">
+          <label for="ticket-quantity">Number of Tickets:</label>
+          <input type="number" id="ticket-quantity" min="1" value="1">
+          <br>
+          <label for="credit-card">Credit Card Number:</label>
+          <input type="text" id="credit-card" placeholder="xxxx-xxxx-xxxx-xxxx">
+          <br>
+          <label for="email">Email Address:</label>
+          <input type="email" id="email" placeholder="example@example.com">
+          <br>
+          <button type="submit">Purchase</button>
+          <button type="reset">Reset</button>
+        </form>
+        <p id="purchase-message" class="hidden"></p>
+      </section>
+    </main>
+    <script src="activities.js"></script>
+  </body>
+</html>
