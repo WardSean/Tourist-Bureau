@@ -2,9 +2,7 @@
 <html>
 <head>
 	<title>Visitor's Bureau - Hiking</title>
-	<!-- Add your CSS and JavaScript files here -->
-    <link rel="stylesheet" href="style.css">
-
+	<link rel="stylesheet" href="style.css">
 </head>
 <body>
 	<header>
@@ -20,30 +18,31 @@
 	
 	<main>
 		<h1>Hiking Trails</h1>
+
+		<select id="hikingDropdown">
+			<option value="">Select One</option>
+		</select>
 		
 		<div class="hiking-trails">
 			<div class="trail">
-				<h2>Trail 1</h2>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla faucibus varius lectus, nec consequat lorem commodo vel.</p>
-				<p>Difficulty: Easy</p>
-			</div>
-			<div class="trail">
-				<h2>Trail 2</h2>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla faucibus varius lectus, nec consequat lorem commodo vel.</p>
-				<p>Difficulty: Moderate</p>
-			</div>
-			<div class="trail">
-				<h2>Trail 3</h2>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla faucibus varius lectus, nec consequat lorem commodo vel.</p>
-				<p>Difficulty: Difficult</p>
+				<div class="trail-photo">
+					<img src="" alt="Trail Photo" class="selected-hike-photo">
+				</div>
+				<div class="trail-info">
+					<h2 class="selected-hike-name"></h2>
+					<p class="selected-hike-info"></p>
+					<p class="selected-hike-info"></p>
+					<div class="map-screenshot">
+						<img src="" alt="Trail Map" class="selected-hike-map">
+					</div>
+				</div>
 			</div>
 		</div>
+
+		
+		
+		<script src="hiking.js"></script> <!-- Move the script tag here -->
 	</main>
 
-	<footer>
-		<!-- Add your footer content here -->
-	</footer>
-
-	<script src="hiking.js"></script>
 </body>
 </html>

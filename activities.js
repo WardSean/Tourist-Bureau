@@ -1,176 +1,224 @@
-let categories = ["Sports", "Music", "Art"];
-let activities = [  {    id: "1",    name: "Football",    category: "Sports",    price: 10.99,    description: "Play a game of football",    location: "Park",    image: "https://via.placeholder.com/150",  },  {    id: "2",    name: "Guitar Lessons",    category: "Music",    price: 20.99,    description: "Learn to play the guitar",    location: "Music school",    image: "https://via.placeholder.com/150",  },  {    id: "3",    name: "Painting",    category: "Art",    price: 0,    description: "Paint a picture",    location: "Art studio",    image: "https://via.placeholder.com/150",  },];
+"use strict";
 
-window.addEventListener("load", () => {
-  // Populate categories dropdown list
-  populateCategories(categories);
+let categories = ["Adventures", "Arts & Crafts", "Museums", "Wine Tastings", "Other"];
 
-  // Add event listeners to form elements
-  const categoryDropdown = document.getElementById("activity-categories");
-  const activityDropdown = document.getElementById("activities");
-  const buyForm = document.getElementById("buy-form");
-  const purchaseMessage = document.getElementById("purchase-message");
-  categoryDropdown.addEventListener("change", () => {
-    // Populate activities dropdown list
-    populateActivities(activities, categoryDropdown.value);
-
-    // Hide activity details and purchase form/message
-    hideActivityDetails();
-    hideBuyForm();
-    hidePurchaseMessage();
-  });
-
-  activityDropdown.addEventListener("change", () => {
-    // Display activity details
-    displayActivityDetails(activities, activityDropdown.value);
-
-    // Hide purchase message
-    hidePurchaseMessage();
-
-    const selectedActivity = getActivityById(activities, activityDropdown.value);
-
-    if (selectedActivity.price > 0) {
-      // Display buy form
-      displayBuyForm();
-
-      // Add submit event listener to buy form
-      buyForm.addEventListener("submit", (event) => {
-        event.preventDefault();
-        const formData = new FormData(buyForm);
-        const numTickets = parseInt(formData.get("num-tickets"));
-        const creditCardNumber = formData.get("credit-card-number");
-        const email = formData.get("email");
-
-        // Validate form data
-        const validationMessage = validateFormData(numTickets, creditCardNumber, email);
-        if (validationMessage) {
-          // Display validation message
-          displayPurchaseMessage(validationMessage, true);
-        } else {
-          // Display confirmation message
-          const activityName = selectedActivity.name;
-          const totalAmount = numTickets * selectedActivity.price;
-          const confirmationMessage = "Your credit card has been charged $${totalAmount.toFixed(2)} for ${numTickets} to ${activityName}. A confirmation email has been sent to ${email}."
-          // Send confirmation email
-          sendConfirmationEmail(email, activityName, totalAmount);
-          // Display success message
-          const successMessage = "You have successfully purchased ${numTickets} ticket(s) to ${activityName} for a total of $${totalAmount.toFixed(2)}. A confirmation email has been sent to ${email}.";
-          displayPurchaseMessage(successMessage, false);
-    
-          // Hide buy form
-          hideBuyForm();
-        }
-      });
-    } else {
-      // Hide buy form
-      hideBuyForm();
+let activities = [
+   {
+        category: "Adventures", 
+        id: "A101", 
+        name: "Valley Hot Air Balloons", 
+        description: "Enjoy a lovely hot air balloon ride over the valley at sunrise.  Call 800-555-1212 to reserve a date/time after you complete your e-ticket purchase.", 
+        location: "121 S. Main Street",
+        price: 265.00 
+   },
+   {
+        category: "Adventures", 
+        id: "A102", 
+        name: "River Runners: Float Trip", 
+        description: "A mellow float trip with lovely scenery, great fishing, just a few riffles, and it finishes back at our base. It is a perfect trip for those wishing to take their time, or those on a limited schedule.", 
+        location: "145 FM 103",
+        price: 65.00 
+    },
+    {
+        category: "Adventures", 
+        id: "A103", 
+        name: "River Runners: Ride the Rapids", 
+        description: "Experience 3-4 hours of Class II and III whitewater rafting with breathtaking scenery. It is a fun, thrilling, and memorable adventure that everyone from ages 8 and up can enjoy – no experience necessary!", 
+        location: "145 FM 103",
+        price: 145.00 
+    },     
+    {
+        category: "Arts & Crafts", 
+        id: "AC101", 
+        name: "Painting with a Twist : Oils", 
+        description: "Enjoy 2 hours of creating an oil painting by following along with an experienced artist.  Drinks and snacks are included.", 
+        location: "1991 Paint Drive",
+        price: 40.00 
+    },
+    {
+        category: "Arts & Crafts", 
+        id: "AC102", 
+        name: "Painting with a Twist : Watercolor", 
+        description: "Enjoy 2 hours of creating a watercolor painting by following along with an experienced artist.  Drinks and snacks are included.", 
+        location: "1991 Paint Drive",
+        price: 40.00 
+    },   
+    {
+        category: "Museums", 
+        id: "M101", 
+        name: "Bravings Airship Museum", 
+        description: "Enjoy climbing on and in our collection of small airplanes.  You will find bi-planes, experimental planes and small jets.", 
+        location: "101 Airfield Drive",
+        price: 10.00
+    },   
+    {
+        category: "Museums", 
+        id: "M102", 
+        name: "Forks and Spoons Museum", 
+        description: "Enjoy touring our qwerky Forks and Spoons Museum.  It houses the worlds largest collection of, you guessed it, forks and spoons!", 
+        location: "1056 Lost Knives Court",
+        price: 3.00
+    },  
+    {
+        category: "Museums", 
+        id: "M103", 
+        name: "Steenges Computing Museum", 
+        description: "Enjoy our the Stengees Computing Museum that illustrates how computing has changed over the last 60 years.", 
+        location: "103 Technology Way",
+        price: 0.00 
+    },  
+    {
+        category: "Wine Tastings", 
+        id: "WT-101", 
+        name: "Hastings Winery Tours and Tastings", 
+        description: "Hastings Winery is a small, family owned winery in the heart of San Jose, CA. We pride ourselves on producing single vineyard, small-batch, handcrafted premium wines sourced from the finest grapes in our valley.", 
+        location: "10987 FM 1187",
+        price: 12.00 
+    },   
+    {
+        category: "Wine Tastings", 
+        id: "WT-102", 
+        name: "Lone Oak Winery", 
+        description: "We are a family and friend centered winery that thrives to make each of our guests feel right at home. With a growing wine list of the finest local wines, we offer tours and an incredible experience. We are open for to-go, curbside, and delivery.", 
+        location: "121 Burleson Court",
+        price: 0.00 
+    },   
+    {
+        category: "Other", 
+        id: "OTH101", 
+        name: "Fire Department: Ride Along", 
+        description: "Spend the day hanging out at one of our local fire stations, visiting with the staff and learning about their jobs.  If they receive a call, you can ride along with them!", 
+        location: "10 Redline Drive",
+        price: 25.00 
+    },   
+    {
+        category: "Other", 
+        id: "OTH102", 
+        name: "Homes For Our Neighbors", 
+        description: "Yes, you are a visitor!  But what better way to learn about a community than volunteer with the locals to build affordable housing.  Whether it be for an hour or a week, we would love to have you with us!", 
+        location: "Call (555) 555-5555",
+        price: 0.00 
     }
-});
-});
+];
 
-function populateCategories(categories) {
-const categoryDropdown = document.getElementById("activity-categories");
+// Populate activity categories dropdown
+let categoryDropdown = document.getElementById("activity-categories");
+
 categories.forEach((category) => {
-const option = document.createElement("option");
-option.value = category;
-option.text = category;
-categoryDropdown.appendChild(option);
+  let option = document.createElement("option");
+  option.value = category;
+  option.text = category;
+  categoryDropdown.appendChild(option);
 });
-}
 
-function populateActivities(activities, category) {
-const activityDropdown = document.getElementById("activities");
-activityDropdown.innerHTML = "";
+// Handle category selection change
+categoryDropdown.addEventListener("change", function () {
+  let selectedCategory = categoryDropdown.value;
+  let activityDropdown = document.getElementById("activities");
 
-activities.forEach((activity) => {
-if (activity.category === category) {
-const option = document.createElement("option");
-option.value = activity.id;
-option.text = activity.name;
-activityDropdown.appendChild(option);
-}
+  // Clear previous activities
+  while (activityDropdown.firstChild) {
+    activityDropdown.firstChild.remove();
+  }
+
+  // Populate activities dropdown based on selected category
+  activities
+    .filter((activity) => activity.category === selectedCategory)
+    .forEach((activity) => {
+      let option = document.createElement("option");
+      option.value = activity.id;
+      option.text = activity.name;
+      activityDropdown.appendChild(option);
+    });
+
+  // Show activity dropdown
+  activityDropdown.style.display = "block";
 });
-}
 
-function displayActivityDetails(activities, activityId) {
-const selectedActivity = getActivityById(activities, activityId);
+// Handle activity selection change
+let activityDropdown = document.getElementById("activities");
+activityDropdown.addEventListener("change", function () {
+  let selectedActivityId = activityDropdown.value;
 
-const activityName = document.getElementById("activity-name");
-const activityPrice = document.getElementById("activity-price");
-const activityDescription = document.getElementById("activity-description");
-const activityLocation = document.getElementById("activity-location");
-const activityImage = document.getElementById("activity-image");
+  // Find the selected activity
+  let selectedActivity = activities.find(
+    (activity) => activity.id === selectedActivityId
+  );
 
-activityName.innerText = selectedActivity.name;
-activityPrice.innerText = `$${selectedActivity.price.toFixed(2)}`;
-activityDescription.innerText = selectedActivity.description;
-activityLocation.innerText = `Location: ${selectedActivity.location}`;
-activityImage.src = selectedActivity.image;
+  // Display activity details
+  let activityName = document.getElementById("activity-name");
+  let activityDescription = document.getElementById("activity-description");
+  let activityLocation = document.getElementById("activity-location");
+  let activityPrice = document.getElementById("activity-price");
+  let buyForm = document.getElementById("buy-form");
+  let purchaseMessage = document.getElementById("purchase-message");
+
+  activityName.textContent = selectedActivity.name;
+  activityDescription.textContent = selectedActivity.description;
+  activityLocation.textContent = "Location: " + selectedActivity.location;
+  activityPrice.textContent = "Price: $" + selectedActivity.price.toFixed(2);
+
+  // Hide/show relevant elements
+  activityName.style.display = "block";
+  activityDescription.style.display = "block";
+  activityLocation.style.display = "block";
+  activityPrice.style.display = "block";
+  buyForm.style.display = "block";
+  purchaseMessage.style.display = "none";
+});
+
+// Regular expressions for credit card and email validation
+const creditCardRegex = /^\d{4}-\d{4}-\d{4}-\d{4}$/;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Handle purchase form submission
+let buyForm = document.getElementById("buy-form");
+buyForm.addEventListener("submit", function (event) {
+  event.preventDefault();
+
+  let ticketQuantity = document.getElementById("ticket-quantity").value;
+  let creditCard = document.getElementById("credit-card").value;
+  let email = document.getElementById("email").value;
+
+  // Validate credit card number
+  if (!creditCardRegex.test(creditCard)) {
+    alert("Invalid credit card number. Please enter a valid credit card number.");
+    return;
+  }
+
+  // Validate email address
+  if (!emailRegex.test(email)) {
+    alert("Invalid email address. Please enter a valid email address.");
+    return;
+  }
+
+  // Perform purchase logic here
+
+  // Display purchase message
+  let purchaseMessage = document.getElementById("purchase-message");
+  purchaseMessage.textContent =
+    "Thank you for your purchase. We have sent a confirmation email to " +
+    email +
+    ".";
+  purchaseMessage.style.display = "block";
+
+  // Hide the buy form
+  buyForm.style.display = "none";
+});
 
 
-// Display activity details container
-const activityDetails = document.getElementById("activity-details");
-activityDetails.style.display = "block";
-}
+// Handle reset button click
+let resetButton = document.querySelector("button[type='reset']");
+resetButton.addEventListener("click", function () {
+  // Hide activity details and buy form
+  let activityDetails = document.getElementById("activity-details");
+  activityDetails.style.display = "none";
+  let buyForm = document.getElementById("buy-form");
+  buyForm.style.display = "none";
 
-function hideActivityDetails() {
-// Hide activity details container
-const activityDetails = document.getElementById("activity-details");
-activityDetails.style.display = "none";
-}
-
-function getActivityById(activities, activityId) {
-return activities.find((activity) => activity.id === activityId);
-}
-
-function displayBuyForm() {
-const buyForm = document.getElementById("buy-form");
-buyForm.style.display = "block";
-}
-
-function hideBuyForm() {
-const buyForm = document.getElementById("buy-form");
-buyForm.style.display = "none";
-}
-
-function validateFormData(numTickets, creditCardNumber, email) {
-let errorMessage = "";
-
-if (isNaN(numTickets) || numTickets <= 0) {
-errorMessage = "Please enter a valid number of tickets.";
-} else if (!isValidCreditCardNumber(creditCardNumber)) {
-errorMessage = "Please enter a valid credit card number.";
-} else if (!isValidEmail(email)) {
-errorMessage = "Please enter a valid email address.";
-}
-
-return errorMessage;
-}
-
-function isValidCreditCardNumber(creditCardNumber) {
-const regex = /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|5[0-9]{2})[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/;
-return regex.test(creditCardNumber);
-}
-
-function isValidEmail(email) {
-const regex = /\S+@\S+.\S+/;
-return regex.test(email);
-}
-
-function displayPurchaseMessage(message, isError) {
-const purchaseMessage = document.getElementById("purchase-message");
-purchaseMessage.innerText = message;
-
-if (isError) {
-purchaseMessage.classList.add("error");
-} else {
-purchaseMessage.classList.remove("error");
-}
-
-purchaseMessage.style.display = "block";
-}
-
-function hidePurchaseMessage() {
-const purchaseMessage = document.getElementById("purchase-message");
-purchaseMessage.style.display = "none";
-}
+  // Reset form values
+  let categoryDropdown = document.getElementById("activity-categories");
+  categoryDropdown.value = "";
+  let activityDropdown = document.getElementById("activities");
+  activityDropdown.value = "";
+});

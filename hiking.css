@@ -1,0 +1,65 @@
+/* style.css */
+
+/* Add general styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  /* Style the hiking trails section */
+  .hiking-trails {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20px;
+  }
+  
+  /* Style the trail photo */
+  .trail-photo img {
+    width: 100%;
+    height: auto;
+  }
+  
+  /* Style the trail info */
+  .trail-info {
+    background-color: #f7f7f7;
+    padding: 20px;
+  }
+  
+  .trail-info h2 {
+    margin-top: 0;
+  }
+  
+  .trail-info p {
+    margin-bottom: 10px;
+  }
+  
+  /* Style the map screenshot */
+  .map-screenshot img {
+    width: 100%;
+    height: auto;
+  }
+  
+  /* Additional CSS */
+  .hiking-trails {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20px;
+  }
+  
+  .trail {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  
+  .selected-hike-photo[src=""],
+  .selected-hike-map[src=""] {
+    display: none;
+  }
+  
